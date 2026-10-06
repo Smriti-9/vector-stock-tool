@@ -6,159 +6,193 @@
 
 <title>Vector Stock Tool</title>
 
+<!-- ImageTracerJS = Bitmap to REAL SVG paths -->
+<script src="https://cdn.jsdelivr.net/npm/imagetracerjs@1.2.6/imagetracer_v1.2.6.js"></script>
+
 <style>
-* {
-  box-sizing: border-box;
+*{
+  box-sizing:border-box;
 }
 
-body {
-  margin: 0;
-  padding: 16px;
-  font-family: Arial, sans-serif;
-  background: #111827;
-  color: white;
+body{
+  margin:0;
+  padding:16px;
+  font-family:Arial,sans-serif;
+  background:#111827;
+  color:white;
 }
 
-.app {
-  max-width: 700px;
-  margin: auto;
+.app{
+  max-width:700px;
+  margin:auto;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 6px;
+h1{
+  text-align:center;
+  margin-bottom:6px;
 }
 
-.subtitle {
-  text-align: center;
-  color: #9ca3af;
-  margin-bottom: 20px;
+.subtitle{
+  text-align:center;
+  color:#9ca3af;
+  margin-bottom:20px;
 }
 
-.box {
-  background: #1f2937;
-  border-radius: 16px;
-  padding: 18px;
-  margin-bottom: 18px;
+.box{
+  background:#1f2937;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:18px;
 }
 
-h2 {
-  margin-top: 0;
-  font-size: 20px;
+h2{
+  margin-top:0;
+  font-size:20px;
 }
 
 input,
-textarea {
-  width: 100%;
-  padding: 13px;
-  border: 0;
-  border-radius: 9px;
-  font-size: 15px;
+textarea,
+select{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:9px;
+  font-size:15px;
 }
 
-input[type="file"] {
-  background: #374151;
-  color: white;
+input[type=file]{
+  background:#374151;
+  color:white;
 }
 
-textarea {
-  min-height: 110px;
-  resize: vertical;
+textarea{
+  min-height:110px;
+  resize:vertical;
 }
 
-.preview {
-  margin-top: 18px;
-  text-align: center;
-  padding: 10px;
-  border-radius: 12px;
-  background: white;
+.preview{
+  margin-top:18px;
+  text-align:center;
+  padding:10px;
+  border-radius:12px;
+  background:white;
+  min-height:100px;
 }
 
-.preview img {
-  max-width: 100%;
-  max-height: 350px;
-  border-radius: 10px;
+.preview img,
+.preview svg{
+  max-width:100%;
+  max-height:350px;
 }
 
-.controls {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 18px;
+.controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:18px;
 }
 
-label {
-  display: block;
-  margin-bottom: 6px;
-  color: #d1d5db;
-  font-size: 14px;
+label{
+  display:block;
+  margin-bottom:6px;
+  color:#d1d5db;
+  font-size:14px;
 }
 
-.checkrow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 14px;
+.checkrow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:14px;
 }
 
-.checkrow input {
-  width: 18px;
-  height: 18px;
+.checkrow input{
+  width:18px;
+  height:18px;
 }
 
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 12px;
-  border: 0;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: bold;
+button{
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border:0;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-.blue {
-  background: #3b82f6;
-  color: white;
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
 }
 
-.green {
-  background: #22c55e;
-  color: white;
+.blue{
+  background:#3b82f6;
+  color:white;
 }
 
-.orange {
-  background: #f59e0b;
-  color: white;
+.green{
+  background:#22c55e;
+  color:white;
 }
 
-.gray {
-  background: #4b5563;
-  color: white;
+.orange{
+  background:#f59e0b;
+  color:white;
 }
 
-.status {
-  text-align: center;
-  margin-top: 14px;
-  color: #a7f3d0;
+.red{
+  background:#ef4444;
+  color:white;
 }
 
-.result {
-  margin-top: 14px;
-  padding: 14px;
-  background: #111827;
-  border-radius: 10px;
-  line-height: 1.7;
+.gray{
+  background:#4b5563;
+  color:white;
 }
 
-.small {
-  color: #9ca3af;
-  font-size: 13px;
-  line-height: 1.5;
+.status{
+  text-align:center;
+  margin-top:14px;
+  color:#a7f3d0;
+  line-height:1.5;
 }
 
-@media (max-width: 500px) {
-  .controls {
-    grid-template-columns: 1fr;
+.result{
+  margin-top:14px;
+  padding:14px;
+  background:#111827;
+  border-radius:10px;
+  line-height:1.7;
+}
+
+.small{
+  color:#9ca3af;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.progress{
+  width:100%;
+  height:8px;
+  background:#374151;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:12px;
+  display:none;
+}
+
+.progressBar{
+  height:100%;
+  width:0%;
+  background:#22c55e;
+  transition:.3s;
+}
+
+@media(max-width:500px){
+  .controls{
+    grid-template-columns:1fr;
   }
 }
 </style>
@@ -171,13 +205,15 @@ button {
 <h1>Vector Stock Tool</h1>
 
 <div class="subtitle">
-Prepare your artwork for stock submission
+Image → AI Background Remove → SVG → EPS
 </div>
 
 
+<!-- UPLOAD -->
+
 <div class="box">
 
-<h2>1. Upload Artwork</h2>
+<h2>1. Upload Image</h2>
 
 <input
   type="file"
@@ -188,45 +224,57 @@ Prepare your artwork for stock submission
 <div
   class="preview"
   id="previewBox"
-  style="display:none;"
+  style="display:none"
 >
 <img id="previewImage">
 </div>
 
-<div class="status" id="status">
+<div
+  class="status"
+  id="status"
+>
 Ready
 </div>
 
 </div>
 
 
+<!-- RESIZE -->
+
 <div class="box">
 
-<h2>2. Resize</h2>
+<h2>2. Resize Image</h2>
 
 <div class="controls">
 
 <div>
+
 <label>Width (px)</label>
+
 <input
   type="number"
   id="width"
   value="2000"
   min="1"
 >
+
 </div>
 
 <div>
+
 <label>Height (px)</label>
+
 <input
   type="number"
   id="height"
   value="2000"
   min="1"
 >
+
 </div>
 
 </div>
+
 
 <div class="checkrow">
 
@@ -242,6 +290,7 @@ Lock aspect ratio
 
 </div>
 
+
 <button
   class="blue"
   onclick="resizeImage()"
@@ -252,17 +301,54 @@ Resize Image
 </div>
 
 
+<!-- AI BACKGROUND -->
+
 <div class="box">
 
-<h2>3. Background Remove</h2>
+<h2>3. AI Background Remove</h2>
 
 <p class="small">
-Removes white/light background from simple images.
+Remove image background using browser-side AI.
+The first run may take some time because the AI model
+needs to load.
 </p>
 
 <button
   class="orange"
-  onclick="removeBackground()"
+  id="aiButton"
+  onclick="removeAIBackground()"
+>
+✨ AI Remove Background
+</button>
+
+<div
+  class="progress"
+  id="progress"
+>
+
+<div
+  class="progressBar"
+  id="progressBar"
+></div>
+
+</div>
+
+</div>
+
+
+<!-- SIMPLE BACKGROUND -->
+
+<div class="box">
+
+<h2>4. Simple White Background</h2>
+
+<p class="small">
+For logos and artwork with a simple white background.
+</p>
+
+<button
+  class="gray"
+  onclick="removeWhiteBackground()"
 >
 Remove White Background
 </button>
@@ -270,9 +356,77 @@ Remove White Background
 </div>
 
 
+<!-- VECTOR -->
+
 <div class="box">
 
-<h2>4. Download</h2>
+<h2>5. Image → True SVG</h2>
+
+<p class="small">
+Creates real SVG paths from the bitmap.
+The PNG/JPG is NOT simply embedded inside the SVG.
+</p>
+
+
+<label>
+Vector Quality
+</label>
+
+<select id="quality">
+
+<option value="fast">
+Fast
+</option>
+
+<option
+  value="normal"
+  selected
+>
+Normal
+</option>
+
+<option value="high">
+High Detail
+</option>
+
+</select>
+
+
+<button
+  class="blue"
+  id="vectorButton"
+  onclick="createSVG()"
+>
+⚡ Convert to True SVG
+</button>
+
+</div>
+
+
+<!-- VECTOR PREVIEW -->
+
+<div class="box">
+
+<h2>6. Vector Preview</h2>
+
+<div
+  class="preview"
+  id="svgPreview"
+>
+<span style="color:#111827">
+SVG preview will appear here
+</span>
+</div>
+
+</div>
+
+
+<!-- DOWNLOAD -->
+
+<div class="box">
+
+<h2>7. Download</h2>
+
 
 <button
   class="green"
@@ -281,6 +435,7 @@ Remove White Background
 Download Transparent PNG
 </button>
 
+
 <button
   class="gray"
   onclick="downloadJPG()"
@@ -288,22 +443,38 @@ Download Transparent PNG
 Download JPG
 </button>
 
+
 <button
   class="blue"
+  id="svgButton"
   onclick="downloadSVG()"
+  disabled
 >
-Download SVG
+Download True SVG
+</button>
+
+
+<button
+  class="orange"
+  id="epsButton"
+  onclick="downloadEPS()"
+  disabled
+>
+Download EPS
 </button>
 
 </div>
 
 
+<!-- STOCK CHECK -->
+
 <div class="box">
 
-<h2>5. Stock Check</h2>
+<h2>8. Stock Check</h2>
 
 <p class="small">
-Basic technical check only. It does not guarantee stock approval.
+Basic technical check only.
+It does not guarantee marketplace approval.
 </p>
 
 <button
@@ -323,21 +494,27 @@ Not checked yet.
 </div>
 
 
+<!-- METADATA -->
+
 <div class="box">
 
-<h2>6. Metadata</h2>
+<h2>9. Metadata</h2>
 
-<label>Title</label>
+<label>
+Title
+</label>
 
 <input
   type="text"
   id="title"
-  placeholder="Example: Modern abstract background"
+  placeholder="Modern abstract background"
 >
 
 <br><br>
 
-<label>Keywords</label>
+<label>
+Keywords
+</label>
 
 <textarea
   id="keywords"
@@ -356,11 +533,16 @@ Copy Metadata
 </div>
 
 
-<script>
+<script type="module">
 
 let originalImage = null;
 let workingCanvas = null;
 let originalRatio = 1;
+
+let currentSVG = "";
+
+
+/* ELEMENTS */
 
 const imageInput =
 document.getElementById("imageInput");
@@ -371,7 +553,7 @@ document.getElementById("previewImage");
 const previewBox =
 document.getElementById("previewBox");
 
-const statusText =
+const status =
 document.getElementById("status");
 
 const widthInput =
@@ -383,30 +565,50 @@ document.getElementById("height");
 const lockRatio =
 document.getElementById("lockRatio");
 
+const svgPreview =
+document.getElementById("svgPreview");
+
+const svgButton =
+document.getElementById("svgButton");
+
+const epsButton =
+document.getElementById("epsButton");
+
+const aiButton =
+document.getElementById("aiButton");
+
+const progress =
+document.getElementById("progress");
+
+const progressBar =
+document.getElementById("progressBar");
+
+
+/* UPLOAD */
 
 imageInput.addEventListener(
 "change",
-function(event) {
+function(e){
 
 const file =
-event.target.files[0];
+e.target.files[0];
 
-if (!file) return;
+if(!file) return;
 
 const reader =
 new FileReader();
 
 reader.onload =
-function(e) {
+function(event){
 
 originalImage =
 new Image();
 
 originalImage.onload =
-function() {
+function(){
 
 previewImage.src =
-e.target.result;
+event.target.result;
 
 previewBox.style.display =
 "block";
@@ -422,14 +624,21 @@ originalImage.width /
 originalImage.height;
 
 workingCanvas = null;
+currentSVG = "";
 
-statusText.textContent =
-"Image loaded successfully";
+svgButton.disabled = true;
+epsButton.disabled = true;
+
+svgPreview.innerHTML =
+'<span style="color:#111827">SVG preview will appear here</span>';
+
+status.textContent =
+"Image loaded successfully.";
 
 };
 
 originalImage.src =
-e.target.result;
+event.target.result;
 
 };
 
@@ -438,14 +647,16 @@ reader.readAsDataURL(file);
 });
 
 
+/* RATIO */
+
 widthInput.addEventListener(
 "input",
-function() {
+function(){
 
-if (
+if(
 lockRatio.checked &&
 originalImage
-) {
+){
 
 heightInput.value =
 Math.round(
@@ -460,12 +671,12 @@ originalRatio
 
 heightInput.addEventListener(
 "input",
-function() {
+function(){
 
-if (
+if(
 lockRatio.checked &&
 originalImage
-) {
+){
 
 widthInput.value =
 Math.round(
@@ -478,9 +689,11 @@ originalRatio
 });
 
 
-function makeCanvas() {
+/* CANVAS */
 
-if (!originalImage) {
+function makeCanvas(){
+
+if(!originalImage){
 
 alert(
 "Please upload an image first."
@@ -490,30 +703,39 @@ return null;
 
 }
 
-const width =
+const w =
 parseInt(widthInput.value);
 
-const height =
+const h =
 parseInt(heightInput.value);
 
 const canvas =
 document.createElement("canvas");
 
-canvas.width =
-width;
-
-canvas.height =
-height;
+canvas.width = w;
+canvas.height = h;
 
 const ctx =
-canvas.getContext("2d");
+canvas.getContext(
+"2d",
+{
+willReadFrequently:true
+}
+);
+
+ctx.clearRect(
+0,
+0,
+w,
+h
+);
 
 ctx.drawImage(
 originalImage,
 0,
 0,
-width,
-height
+w,
+h
 );
 
 workingCanvas =
@@ -524,28 +746,333 @@ return canvas;
 }
 
 
-function resizeImage() {
+/* RESIZE */
+
+window.resizeImage =
+function(){
 
 const canvas =
 makeCanvas();
 
-if (!canvas) return;
+if(!canvas) return;
 
 previewImage.src =
 canvas.toDataURL("image/png");
 
-statusText.textContent =
-"Image resized successfully";
+status.textContent =
+"Image resized.";
 
-}
+};
 
 
-function removeBackground() {
+/* WHITE BACKGROUND */
+
+window.removeWhiteBackground =
+function(){
 
 const canvas =
 makeCanvas();
 
-if (!canvas) return;
+if(!canvas) return;
+
+const ctx =
+canvas.getContext("2d");
+
+const data =
+ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+for(
+let i=0;
+i<data.data.length;
+i+=4
+){
+
+const r=data.data[i];
+const g=data.data[i+1];
+const b=data.data[i+2];
+
+if(
+r>235 &&
+g>235 &&
+b>235
+){
+
+data.data[i+3]=0;
+
+}
+
+}
+
+ctx.putImageData(
+data,
+0,
+0
+);
+
+previewImage.src =
+canvas.toDataURL("image/png");
+
+status.textContent =
+"White background removed.";
+
+};
+
+
+/* AI BACKGROUND */
+
+window.removeAIBackground =
+async function(){
+
+if(!imageInput.files[0]){
+
+alert(
+"Please upload an image first."
+);
+
+return;
+
+}
+
+try{
+
+aiButton.disabled = true;
+
+progress.style.display =
+"block";
+
+progressBar.style.width =
+"10%";
+
+status.textContent =
+"Loading AI model...";
+
+
+const mod =
+await import(
+"https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm"
+);
+
+
+progressBar.style.width =
+"30%";
+
+status.textContent =
+"AI is removing background...";
+
+
+const blob =
+await mod.removeBackground(
+imageInput.files[0],
+{
+
+progress:
+(key,current,total)=>{
+
+if(total){
+
+const p =
+30 +
+Math.round(
+current /
+total *
+60
+);
+
+progressBar.style.width =
+p+"%";
+
+}
+
+}
+
+}
+);
+
+
+progressBar.style.width =
+"95%";
+
+
+const url =
+URL.createObjectURL(blob);
+
+const img =
+new Image();
+
+
+img.onload =
+function(){
+
+const canvas =
+document.createElement("canvas");
+
+canvas.width =
+img.naturalWidth;
+
+canvas.height =
+img.naturalHeight;
+
+const ctx =
+canvas.getContext("2d");
+
+ctx.drawImage(
+img,
+0,
+0
+);
+
+workingCanvas =
+canvas;
+
+previewImage.src =
+url;
+
+progressBar.style.width =
+"100%";
+
+status.textContent =
+"✨ AI background removed.";
+
+aiButton.disabled =
+false;
+
+setTimeout(
+()=>{
+progress.style.display =
+"none";
+},
+700
+);
+
+};
+
+img.src =
+url;
+
+}
+catch(error){
+
+console.error(error);
+
+status.textContent =
+"AI background removal failed.";
+
+alert(
+"AI background removal failed. Please check your internet connection."
+);
+
+aiButton.disabled =
+false;
+
+progress.style.display =
+"none";
+
+}
+
+};
+
+
+/* TRUE SVG */
+
+window.createSVG =
+function(){
+
+const canvas =
+workingCanvas ||
+makeCanvas();
+
+if(!canvas) return;
+
+
+if(
+typeof ImageTracer ===
+"undefined"
+){
+
+alert(
+"Vector engine is loading. Please try again."
+);
+
+return;
+
+}
+
+
+const quality =
+document.getElementById(
+"quality"
+).value;
+
+
+let options;
+
+
+if(
+quality === "fast"
+){
+
+options = {
+
+colorsampling:2,
+numberofcolors:16,
+pathomit:8,
+ltres:1,
+qtres:1,
+strokewidth:0
+
+};
+
+}
+else if(
+quality === "normal"
+){
+
+options = {
+
+colorsampling:2,
+numberofcolors:32,
+pathomit:4,
+ltres:1,
+qtres:1,
+strokewidth:0
+
+};
+
+}
+else{
+
+options = {
+
+colorsampling:2,
+numberofcolors:64,
+pathomit:2,
+ltres:.5,
+qtres:.5,
+strokewidth:0
+
+};
+
+}
+
+
+status.textContent =
+"Tracing image into SVG paths...";
+
+
+document.getElementById(
+"vectorButton"
+).disabled = true;
+
+
+setTimeout(
+function(){
+
+try{
 
 const ctx =
 canvas.getContext("2d");
@@ -558,76 +1085,91 @@ canvas.width,
 canvas.height
 );
 
-const data =
-imageData.data;
 
-for (
-let i = 0;
-i < data.length;
-i += 4
-) {
-
-const r = data[i];
-const g = data[i + 1];
-const b = data[i + 2];
-
-if (
-r > 235 &&
-g > 235 &&
-b > 235
-) {
-
-data[i + 3] = 0;
-
-}
-
-}
-
-ctx.putImageData(
+currentSVG =
+ImageTracer.imagedataToSVG(
 imageData,
-0,
-0
+options
 );
 
-previewImage.src =
-canvas.toDataURL("image/png");
 
-workingCanvas =
-canvas;
+svgPreview.innerHTML =
+currentSVG;
 
-statusText.textContent =
-"White background removed";
+
+svgButton.disabled =
+false;
+
+epsButton.disabled =
+false;
+
+
+status.textContent =
+"✅ True SVG vector created.";
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+"SVG vectorization failed."
+);
+
+status.textContent =
+"Vectorization failed.";
 
 }
 
 
-function downloadPNG() {
+document.getElementById(
+"vectorButton"
+).disabled = false;
+
+},
+50
+);
+
+};
+
+
+/* PNG */
+
+window.downloadPNG =
+function(){
 
 const canvas =
-workingCanvas || makeCanvas();
+workingCanvas ||
+makeCanvas();
 
-if (!canvas) return;
+if(!canvas) return;
 
 const link =
 document.createElement("a");
 
 link.download =
-"stock-transparent.png";
+"vector-stock-transparent.png";
 
 link.href =
-canvas.toDataURL("image/png");
+canvas.toDataURL(
+"image/png"
+);
 
 link.click();
 
-}
+};
 
 
-function downloadJPG() {
+/* JPG */
+
+window.downloadJPG =
+function(){
 
 const canvas =
+workingCanvas ||
 makeCanvas();
 
-if (!canvas) return;
+if(!canvas) return;
 
 const jpg =
 document.createElement("canvas");
@@ -661,46 +1203,37 @@ const link =
 document.createElement("a");
 
 link.download =
-"stock-image.jpg";
+"vector-stock.jpg";
 
 link.href =
 jpg.toDataURL(
 "image/jpeg",
-0.95
+.95
 );
 
 link.click();
 
+};
+
+
+/* SVG DOWNLOAD */
+
+window.downloadSVG =
+function(){
+
+if(!currentSVG){
+
+alert(
+"Create the SVG first."
+);
+
+return;
+
 }
-
-
-function downloadSVG() {
-
-const canvas =
-workingCanvas || makeCanvas();
-
-if (!canvas) return;
-
-const png =
-canvas.toDataURL("image/png");
-
-const svg =
-`<svg xmlns="http://www.w3.org/2000/svg"
-width="${canvas.width}"
-height="${canvas.height}"
-viewBox="0 0 ${canvas.width} ${canvas.height}">
-
-<image
-href="${png}"
-width="${canvas.width}"
-height="${canvas.height}"
-/>
-
-</svg>`;
 
 const blob =
 new Blob(
-[svg],
+[currentSVG],
 {
 type:"image/svg+xml"
 }
@@ -716,23 +1249,423 @@ link.href =
 url;
 
 link.download =
-"stock-image.svg";
+"vector-stock.svg";
 
 link.click();
 
 URL.revokeObjectURL(url);
 
+};
+
+
+/* SVG -> EPS */
+
+function svgToEPS(svgString){
+
+const parser =
+new DOMParser();
+
+const doc =
+parser.parseFromString(
+svgString,
+"image/svg+xml"
+);
+
+const svg =
+doc.documentElement;
+
+const viewBox =
+(
+svg.getAttribute("viewBox") ||
+"0 0 100 100"
+)
+.split(/\s+/)
+.map(Number);
+
+const width =
+viewBox[2] || 100;
+
+const height =
+viewBox[3] || 100;
+
+
+let eps =
+`%!PS-Adobe-3.0 EPSF-3.0
+%%Creator: Vector Stock Tool
+%%BoundingBox: 0 0 ${Math.ceil(width)} ${Math.ceil(height)}
+%%LanguageLevel: 2
+%%EndComments
+
+gsave
+1 -1 scale
+0 -${height} translate
+`;
+
+
+const paths =
+svg.querySelectorAll("path");
+
+
+paths.forEach(
+path=>{
+
+const d =
+path.getAttribute("d");
+
+if(!d) return;
+
+
+eps +=
+"0 setgray\n";
+
+eps +=
+convertPath(d);
+
+eps +=
+"fill\n";
+
+}
+);
+
+
+eps +=
+`
+grestore
+showpage
+%%EOF
+`;
+
+return eps;
+
 }
 
 
-function stockCheck() {
+/* PATH CONVERTER */
+
+function convertPath(d){
+
+const tokens =
+d.match(
+/[A-Za-z]|[-+]?(?:\\d*\\.\\d+|\\d+\\.?)(?:[eE][-+]?\\d+)?/g
+);
+
+if(!tokens) return "";
+
+let i=0;
+let cmd="";
+let x=0;
+let y=0;
+let sx=0;
+let sy=0;
+
+let output="";
+
+
+function number(){
+
+return parseFloat(
+tokens[i++]
+);
+
+}
+
+
+while(i<tokens.length){
+
+if(
+/^[A-Za-z]$/.test(
+tokens[i]
+)
+){
+
+cmd=tokens[i++];
+
+}
+
+
+switch(cmd){
+
+case"M":
+case"m":{
+
+let nx=number();
+let ny=number();
+
+if(cmd==="m"){
+
+x+=nx;
+y+=ny;
+
+}else{
+
+x=nx;
+y=ny;
+
+}
+
+sx=x;
+sy=y;
+
+output+=
+`${x} ${y} moveto\n`;
+
+cmd =
+cmd==="m"
+?"l"
+:"L";
+
+break;
+
+}
+
+
+case"L":
+case"l":{
+
+let nx=number();
+let ny=number();
+
+if(cmd==="l"){
+
+x+=nx;
+y+=ny;
+
+}else{
+
+x=nx;
+y=ny;
+
+}
+
+output+=
+`${x} ${y} lineto\n`;
+
+break;
+
+}
+
+
+case"H":
+case"h":{
+
+let nx=number();
+
+if(cmd==="h")
+x+=nx;
+else
+x=nx;
+
+output+=
+`${x} ${y} lineto\n`;
+
+break;
+
+}
+
+
+case"V":
+case"v":{
+
+let ny=number();
+
+if(cmd==="v")
+y+=ny;
+else
+y=ny;
+
+output+=
+`${x} ${y} lineto\n`;
+
+break;
+
+}
+
+
+case"C":
+case"c":{
+
+let x1=number();
+let y1=number();
+let x2=number();
+let y2=number();
+let nx=number();
+let ny=number();
+
+if(cmd==="c"){
+
+x1+=x;
+y1+=y;
+x2+=x;
+y2+=y;
+nx+=x;
+ny+=y;
+
+}
+
+output+=
+`${x1} ${y1} ${x2} ${y2} ${nx} ${ny} curveto\n`;
+
+x=nx;
+y=ny;
+
+break;
+
+}
+
+
+case"Q":
+case"q":{
+
+let qx=number();
+let qy=number();
+let nx=number();
+let ny=number();
+
+if(cmd==="q"){
+
+qx+=x;
+qy+=y;
+nx+=x;
+ny+=y;
+
+}
+
+const c1x =
+x +
+(2/3) *
+(qx-x);
+
+const c1y =
+y +
+(2/3) *
+(qy-y);
+
+const c2x =
+nx +
+(2/3) *
+(qx-nx);
+
+const c2y =
+ny +
+(2/3) *
+(qy-ny);
+
+output+=
+`${c1x} ${c1y} ${c2x} ${c2y} ${nx} ${ny} curveto\n`;
+
+x=nx;
+y=ny;
+
+break;
+
+}
+
+
+case"Z":
+case"z":
+
+output+=
+"closepath\n";
+
+x=sx;
+y=sy;
+
+break;
+
+
+default:
+
+i++;
+
+break;
+
+}
+
+}
+
+return output;
+
+}
+
+
+/* EPS DOWNLOAD */
+
+window.downloadEPS =
+function(){
+
+if(!currentSVG){
+
+alert(
+"Create the SVG first."
+);
+
+return;
+
+}
+
+try{
+
+const eps =
+svgToEPS(currentSVG);
+
+const blob =
+new Blob(
+[eps],
+{
+type:
+"application/postscript"
+}
+);
+
+const url =
+URL.createObjectURL(blob);
+
+const link =
+document.createElement("a");
+
+link.href =
+url;
+
+link.download =
+"vector-stock.eps";
+
+link.click();
+
+setTimeout(
+()=>{
+URL.revokeObjectURL(url);
+},
+1000
+);
+
+status.textContent =
+"✅ EPS downloaded.";
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+"EPS conversion failed."
+);
+
+}
+
+};
+
+
+/* STOCK CHECK */
+
+window.stockCheck =
+function(){
 
 const result =
 document.getElementById(
 "checkResult"
 );
 
-if (!originalImage) {
+if(!originalImage){
 
 result.innerHTML =
 "⚠️ Please upload an image first.";
@@ -741,54 +1674,111 @@ return;
 
 }
 
-const width =
+const w =
 parseInt(widthInput.value);
 
-const height =
+const h =
 parseInt(heightInput.value);
 
-let text = "";
+let text="";
 
-if (
-width >= 4000 ||
-height >= 4000
-) {
+
+if(
+w>=4000 ||
+h>=4000
+){
 
 text +=
 "✅ Large dimensions<br>";
 
-} else {
+}else{
 
 text +=
-"⚠️ Check image dimensions<br>";
+"⚠️ Check dimensions<br>";
 
 }
+
+
+if(currentSVG){
+
+text +=
+"✅ True SVG available<br>";
+
+}else{
+
+text +=
+"⚠️ SVG not created<br>";
+
+}
+
+
+if(workingCanvas){
+
+const ctx =
+workingCanvas.getContext("2d");
+
+const data =
+ctx.getImageData(
+0,
+0,
+workingCanvas.width,
+workingCanvas.height
+).data;
+
+let alpha=false;
+
+for(
+let i=3;
+i<data.length;
+i+=4
+){
+
+if(data[i]<255){
+
+alpha=true;
+break;
+
+}
+
+}
+
+if(alpha){
+
+text +=
+"✅ Transparency detected<br>";
+
+}
+
+}
+
 
 const file =
 imageInput.files[0];
 
-if (file) {
+if(file){
 
 text +=
-"✅ Image uploaded<br>";
+"📁 "+file.name+"<br>";
 
 text +=
-"📁 File: " +
-file.name +
-"<br>";
+"📦 "+file.type+"<br>";
 
 }
 
+
 text +=
-"<br>⚠️ Final stock acceptance is decided by the marketplace.";
+"<br>⚠️ Final stock approval depends on the marketplace.";
 
 result.innerHTML =
 text;
 
-}
+};
 
 
-function copyMetadata() {
+/* METADATA */
+
+window.copyMetadata =
+function(){
 
 const title =
 document.getElementById(
@@ -801,28 +1791,30 @@ document.getElementById(
 ).value;
 
 const text =
-"Title: " +
-title +
-"\n\nKeywords: " +
+"Title: "+
+title+
+"\n\nKeywords: "+
 keywords;
 
-if (
+if(
 navigator.clipboard
-) {
+){
 
-navigator.clipboard.writeText(text);
+navigator.clipboard.writeText(
+text
+);
 
 alert(
 "Metadata copied!"
 );
 
-} else {
+}else{
 
 alert(text);
 
 }
 
-}
+};
 
 </script>
 

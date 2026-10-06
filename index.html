@@ -1,303 +1,830 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vector Stock Tool</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<title>Vector Stock Tool</title>
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111827;
-      color: white;
-      padding: 20px;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    .app {
-      max-width: 600px;
-      margin: auto;
-    }
+body {
+  margin: 0;
+  padding: 16px;
+  font-family: Arial, sans-serif;
+  background: #111827;
+  color: white;
+}
 
-    h1 {
-      text-align: center;
-      margin-bottom: 8px;
-    }
+.app {
+  max-width: 700px;
+  margin: auto;
+}
 
-    .subtitle {
-      text-align: center;
-      color: #9ca3af;
-      margin-bottom: 25px;
-    }
+h1 {
+  text-align: center;
+  margin-bottom: 6px;
+}
 
-    .box {
-      background: #1f2937;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
+.subtitle {
+  text-align: center;
+  color: #9ca3af;
+  margin-bottom: 20px;
+}
 
-    input[type="file"] {
-      width: 100%;
-      padding: 15px;
-      background: #374151;
-      color: white;
-      border-radius: 10px;
-    }
+.box {
+  background: #1f2937;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 18px;
+}
 
-    .preview {
-      margin-top: 20px;
-      text-align: center;
-    }
+h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
 
-    .preview img {
-      max-width: 100%;
-      max-height: 350px;
-      border-radius: 12px;
-    }
+input,
+textarea {
+  width: 100%;
+  padding: 13px;
+  border: 0;
+  border-radius: 9px;
+  font-size: 15px;
+}
 
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 20px;
-    }
+input[type="file"] {
+  background: #374151;
+  color: white;
+}
 
-    label {
-      font-size: 14px;
-      color: #d1d5db;
-    }
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
 
-    input[type="number"] {
-      width: 100%;
-      margin-top: 6px;
-      padding: 12px;
-      border: 0;
-      border-radius: 8px;
-    }
+.preview {
+  margin-top: 18px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 12px;
+  background: white;
+}
 
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 12px;
-      border: 0;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.preview img {
+  max-width: 100%;
+  max-height: 350px;
+  border-radius: 10px;
+}
 
-    .primary {
-      background: #22c55e;
-      color: white;
-    }
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
+}
 
-    .secondary {
-      background: #3b82f6;
-      color: white;
-    }
+label {
+  display: block;
+  margin-bottom: 6px;
+  color: #d1d5db;
+  font-size: 14px;
+}
 
-    .status {
-      text-align: center;
-      margin-top: 15px;
-      color: #a7f3d0;
-    }
-  </style>
+.checkrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.checkrow input {
+  width: 18px;
+  height: 18px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.blue {
+  background: #3b82f6;
+  color: white;
+}
+
+.green {
+  background: #22c55e;
+  color: white;
+}
+
+.orange {
+  background: #f59e0b;
+  color: white;
+}
+
+.gray {
+  background: #4b5563;
+  color: white;
+}
+
+.status {
+  text-align: center;
+  margin-top: 14px;
+  color: #a7f3d0;
+}
+
+.result {
+  margin-top: 14px;
+  padding: 14px;
+  background: #111827;
+  border-radius: 10px;
+  line-height: 1.7;
+}
+
+.small {
+  color: #9ca3af;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 500px) {
+  .controls {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <h1>Vector Stock Tool</h1>
+<h1>Vector Stock Tool</h1>
 
-    <div class="subtitle">
-      Prepare your artwork for stock submission
-    </div>
+<div class="subtitle">
+Prepare your artwork for stock submission
+</div>
 
-    <div class="box">
 
-      <input
-        type="file"
-        id="imageInput"
-        accept="image/png,image/jpeg,image/webp"
-      >
+<div class="box">
 
-      <div class="preview">
-        <img id="previewImage" style="display:none;">
-      </div>
+<h2>1. Upload Artwork</h2>
 
-      <div class="controls">
+<input
+  type="file"
+  id="imageInput"
+  accept="image/png,image/jpeg,image/webp"
+>
 
-        <div>
-          <label>Width (px)</label>
-          <input type="number" id="width" value="2000">
-        </div>
+<div
+  class="preview"
+  id="previewBox"
+  style="display:none;"
+>
+<img id="previewImage">
+</div>
 
-        <div>
-          <label>Height (px)</label>
-          <input type="number" id="height" value="2000">
-        </div>
+<div class="status" id="status">
+Ready
+</div>
 
-      </div>
+</div>
 
-      <button class="secondary" onclick="resizeImage()">
-        Resize Image
-      </button>
 
-      <button class="primary" onclick="downloadPNG()">
-        Download PNG
-      </button>
+<div class="box">
 
-      <div class="status" id="status">
-        Ready
-      </div>
+<h2>2. Resize</h2>
 
-    </div>
+<div class="controls">
 
-  </div>
+<div>
+<label>Width (px)</label>
+<input
+  type="number"
+  id="width"
+  value="2000"
+  min="1"
+>
+</div>
 
-  <script>
+<div>
+<label>Height (px)</label>
+<input
+  type="number"
+  id="height"
+  value="2000"
+  min="1"
+>
+</div>
 
-    let originalImage = null;
+</div>
 
-    const imageInput = document.getElementById("imageInput");
-    const previewImage = document.getElementById("previewImage");
-    const statusText = document.getElementById("status");
+<div class="checkrow">
 
-    imageInput.addEventListener("change", function(event) {
+<input
+  type="checkbox"
+  id="lockRatio"
+  checked
+>
 
-      const file = event.target.files[0];
+<label for="lockRatio">
+Lock aspect ratio
+</label>
 
-      if (!file) return;
+</div>
 
-      const reader = new FileReader();
+<button
+  class="blue"
+  onclick="resizeImage()"
+>
+Resize Image
+</button>
 
-      reader.onload = function(e) {
+</div>
 
-        originalImage = new Image();
 
-        originalImage.onload = function() {
+<div class="box">
 
-          previewImage.src = e.target.result;
-          previewImage.style.display = "block";
+<h2>3. Background Remove</h2>
 
-          document.getElementById("width").value =
-            originalImage.width;
+<p class="small">
+Removes white/light background from simple images.
+</p>
 
-          document.getElementById("height").value =
-            originalImage.height;
+<button
+  class="orange"
+  onclick="removeBackground()"
+>
+Remove White Background
+</button>
 
-          statusText.textContent =
-            "Image loaded successfully";
+</div>
 
-        };
 
-        originalImage.src = e.target.result;
+<div class="box">
 
-      };
+<h2>4. Download</h2>
 
-      reader.readAsDataURL(file);
+<button
+  class="green"
+  onclick="downloadPNG()"
+>
+Download Transparent PNG
+</button>
 
-    });
+<button
+  class="gray"
+  onclick="downloadJPG()"
+>
+Download JPG
+</button>
 
+<button
+  class="blue"
+  onclick="downloadSVG()"
+>
+Download SVG
+</button>
 
-    function resizeImage() {
+</div>
 
-      if (!originalImage) {
 
-        alert("Please upload an image first.");
+<div class="box">
 
-        return;
+<h2>5. Stock Check</h2>
 
-      }
+<p class="small">
+Basic technical check only. It does not guarantee stock approval.
+</p>
 
-      const width =
-        parseInt(document.getElementById("width").value);
+<button
+  class="blue"
+  onclick="stockCheck()"
+>
+Check Artwork
+</button>
 
-      const height =
-        parseInt(document.getElementById("height").value);
+<div
+  class="result"
+  id="checkResult"
+>
+Not checked yet.
+</div>
 
-      const canvas =
-        document.createElement("canvas");
+</div>
 
-      canvas.width = width;
-      canvas.height = height;
 
-      const ctx =
-        canvas.getContext("2d");
+<div class="box">
 
-      ctx.drawImage(
-        originalImage,
-        0,
-        0,
-        width,
-        height
-      );
+<h2>6. Metadata</h2>
 
-      previewImage.src =
-        canvas.toDataURL("image/png");
+<label>Title</label>
 
-      statusText.textContent =
-        "Image resized successfully";
+<input
+  type="text"
+  id="title"
+  placeholder="Example: Modern abstract background"
+>
 
-    }
+<br><br>
 
+<label>Keywords</label>
 
-    function downloadPNG() {
+<textarea
+  id="keywords"
+  placeholder="abstract, background, modern, design"
+></textarea>
 
-      if (!originalImage) {
+<button
+  class="green"
+  onclick="copyMetadata()"
+>
+Copy Metadata
+</button>
 
-        alert("Please upload an image first.");
+</div>
 
-        return;
+</div>
 
-      }
 
-      const width =
-        parseInt(document.getElementById("width").value);
+<script>
 
-      const height =
-        parseInt(document.getElementById("height").value);
+let originalImage = null;
+let workingCanvas = null;
+let originalRatio = 1;
 
-      const canvas =
-        document.createElement("canvas");
+const imageInput =
+document.getElementById("imageInput");
 
-      canvas.width = width;
-      canvas.height = height;
+const previewImage =
+document.getElementById("previewImage");
 
-      const ctx =
-        canvas.getContext("2d");
+const previewBox =
+document.getElementById("previewBox");
 
-      ctx.drawImage(
-        originalImage,
-        0,
-        0,
-        width,
-        height
-      );
+const statusText =
+document.getElementById("status");
 
-      const link =
-        document.createElement("a");
+const widthInput =
+document.getElementById("width");
 
-      link.download =
-        "stock-image.png";
+const heightInput =
+document.getElementById("height");
 
-      link.href =
-        canvas.toDataURL("image/png");
+const lockRatio =
+document.getElementById("lockRatio");
 
-      link.click();
 
-      statusText.textContent =
-        "PNG downloaded";
+imageInput.addEventListener(
+"change",
+function(event) {
 
-    }
+const file =
+event.target.files[0];
 
-  </script>
+if (!file) return;
+
+const reader =
+new FileReader();
+
+reader.onload =
+function(e) {
+
+originalImage =
+new Image();
+
+originalImage.onload =
+function() {
+
+previewImage.src =
+e.target.result;
+
+previewBox.style.display =
+"block";
+
+widthInput.value =
+originalImage.width;
+
+heightInput.value =
+originalImage.height;
+
+originalRatio =
+originalImage.width /
+originalImage.height;
+
+workingCanvas = null;
+
+statusText.textContent =
+"Image loaded successfully";
+
+};
+
+originalImage.src =
+e.target.result;
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+
+widthInput.addEventListener(
+"input",
+function() {
+
+if (
+lockRatio.checked &&
+originalImage
+) {
+
+heightInput.value =
+Math.round(
+Number(widthInput.value) /
+originalRatio
+);
+
+}
+
+});
+
+
+heightInput.addEventListener(
+"input",
+function() {
+
+if (
+lockRatio.checked &&
+originalImage
+) {
+
+widthInput.value =
+Math.round(
+Number(heightInput.value) *
+originalRatio
+);
+
+}
+
+});
+
+
+function makeCanvas() {
+
+if (!originalImage) {
+
+alert(
+"Please upload an image first."
+);
+
+return null;
+
+}
+
+const width =
+parseInt(widthInput.value);
+
+const height =
+parseInt(heightInput.value);
+
+const canvas =
+document.createElement("canvas");
+
+canvas.width =
+width;
+
+canvas.height =
+height;
+
+const ctx =
+canvas.getContext("2d");
+
+ctx.drawImage(
+originalImage,
+0,
+0,
+width,
+height
+);
+
+workingCanvas =
+canvas;
+
+return canvas;
+
+}
+
+
+function resizeImage() {
+
+const canvas =
+makeCanvas();
+
+if (!canvas) return;
+
+previewImage.src =
+canvas.toDataURL("image/png");
+
+statusText.textContent =
+"Image resized successfully";
+
+}
+
+
+function removeBackground() {
+
+const canvas =
+makeCanvas();
+
+if (!canvas) return;
+
+const ctx =
+canvas.getContext("2d");
+
+const imageData =
+ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+const data =
+imageData.data;
+
+for (
+let i = 0;
+i < data.length;
+i += 4
+) {
+
+const r = data[i];
+const g = data[i + 1];
+const b = data[i + 2];
+
+if (
+r > 235 &&
+g > 235 &&
+b > 235
+) {
+
+data[i + 3] = 0;
+
+}
+
+}
+
+ctx.putImageData(
+imageData,
+0,
+0
+);
+
+previewImage.src =
+canvas.toDataURL("image/png");
+
+workingCanvas =
+canvas;
+
+statusText.textContent =
+"White background removed";
+
+}
+
+
+function downloadPNG() {
+
+const canvas =
+workingCanvas || makeCanvas();
+
+if (!canvas) return;
+
+const link =
+document.createElement("a");
+
+link.download =
+"stock-transparent.png";
+
+link.href =
+canvas.toDataURL("image/png");
+
+link.click();
+
+}
+
+
+function downloadJPG() {
+
+const canvas =
+makeCanvas();
+
+if (!canvas) return;
+
+const jpg =
+document.createElement("canvas");
+
+jpg.width =
+canvas.width;
+
+jpg.height =
+canvas.height;
+
+const ctx =
+jpg.getContext("2d");
+
+ctx.fillStyle =
+"white";
+
+ctx.fillRect(
+0,
+0,
+jpg.width,
+jpg.height
+);
+
+ctx.drawImage(
+canvas,
+0,
+0
+);
+
+const link =
+document.createElement("a");
+
+link.download =
+"stock-image.jpg";
+
+link.href =
+jpg.toDataURL(
+"image/jpeg",
+0.95
+);
+
+link.click();
+
+}
+
+
+function downloadSVG() {
+
+const canvas =
+workingCanvas || makeCanvas();
+
+if (!canvas) return;
+
+const png =
+canvas.toDataURL("image/png");
+
+const svg =
+`<svg xmlns="http://www.w3.org/2000/svg"
+width="${canvas.width}"
+height="${canvas.height}"
+viewBox="0 0 ${canvas.width} ${canvas.height}">
+
+<image
+href="${png}"
+width="${canvas.width}"
+height="${canvas.height}"
+/>
+
+</svg>`;
+
+const blob =
+new Blob(
+[svg],
+{
+type:"image/svg+xml"
+}
+);
+
+const url =
+URL.createObjectURL(blob);
+
+const link =
+document.createElement("a");
+
+link.href =
+url;
+
+link.download =
+"stock-image.svg";
+
+link.click();
+
+URL.revokeObjectURL(url);
+
+}
+
+
+function stockCheck() {
+
+const result =
+document.getElementById(
+"checkResult"
+);
+
+if (!originalImage) {
+
+result.innerHTML =
+"⚠️ Please upload an image first.";
+
+return;
+
+}
+
+const width =
+parseInt(widthInput.value);
+
+const height =
+parseInt(heightInput.value);
+
+let text = "";
+
+if (
+width >= 4000 ||
+height >= 4000
+) {
+
+text +=
+"✅ Large dimensions<br>";
+
+} else {
+
+text +=
+"⚠️ Check image dimensions<br>";
+
+}
+
+const file =
+imageInput.files[0];
+
+if (file) {
+
+text +=
+"✅ Image uploaded<br>";
+
+text +=
+"📁 File: " +
+file.name +
+"<br>";
+
+}
+
+text +=
+"<br>⚠️ Final stock acceptance is decided by the marketplace.";
+
+result.innerHTML =
+text;
+
+}
+
+
+function copyMetadata() {
+
+const title =
+document.getElementById(
+"title"
+).value;
+
+const keywords =
+document.getElementById(
+"keywords"
+).value;
+
+const text =
+"Title: " +
+title +
+"\n\nKeywords: " +
+keywords;
+
+if (
+navigator.clipboard
+) {
+
+navigator.clipboard.writeText(text);
+
+alert(
+"Metadata copied!"
+);
+
+} else {
+
+alert(text);
+
+}
+
+}
+
+</script>
 
 </body>
-  </html>
+</html>
